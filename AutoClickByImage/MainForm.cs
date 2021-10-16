@@ -152,14 +152,14 @@ namespace AutoClickByImage
         {
             ItemImage itemImage = new ItemImage();
             
-            itemImage.orderId = (indexImage + 1) ;
+            itemImage.orderId = (indexOrderId + 1) ;
 
             using (ImageForm imageform = new ImageForm("Add", itemImage))
             {
                 if (imageform.ShowDialog() == DialogResult.OK)
                 {
                     itemImageBindingSource1.Add(imageform.itemImage);
-                    indexImage++;
+                    indexOrderId++;
                 }
             }
 
