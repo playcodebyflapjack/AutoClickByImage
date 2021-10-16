@@ -72,7 +72,6 @@ namespace AutoClickByImage
 
                             Bitmap imageShow = new Bitmap(item.pathFileImage);
 
-                            Console.WriteLine(item.pathFileImage);
 
                             pictureBoxDisplay.Image = imageShow;
 
@@ -90,6 +89,7 @@ namespace AutoClickByImage
                            
                             if (clickIconGame)
                             {
+                                Console.WriteLine(item.pathFileImage);
                                 indexImage++;
                             }
 
@@ -108,7 +108,7 @@ namespace AutoClickByImage
 
 
                 _canceller.Dispose();
-                pictureBoxDisplay.Dispose();
+              
 
                 enableComponent();
 
