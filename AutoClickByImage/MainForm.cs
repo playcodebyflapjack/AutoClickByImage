@@ -186,6 +186,8 @@ namespace AutoClickByImage
             if (itemImageBindingSource1.Current != null)
             {
                 itemImageBindingSource1.RemoveCurrent();
+                dataGridViewItemImage.Update();
+                dataGridViewItemImage.Refresh();
             }
           
         }
