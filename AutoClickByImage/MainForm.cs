@@ -150,9 +150,10 @@ namespace AutoClickByImage
 
         private void BtnAddImage_Click(object sender, EventArgs e)
         {
-            ItemImage itemImage = new ItemImage();
-            
-            itemImage.orderId = (indexOrderId + 1) ;
+            ItemImage itemImage = new ItemImage
+            {
+                orderId = (indexOrderId + 1)
+            };
 
             using (ImageForm imageform = new ImageForm("Add", itemImage))
             {
@@ -163,6 +164,21 @@ namespace AutoClickByImage
                 }
             }
 
+        }
+
+        private void dataGridViewItemImage_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+           
+            ItemImage itemSelected = (ItemImage)itemImageBindingSource1[e.RowIndex];
+
+            using (ImageForm imageform = new ImageForm("Edit", itemSelected))
+            {
+                if (imageform.ShowDialog() == DialogResult.OK)
+                {
+                    dataGridViewItemImage.Update();
+                    dataGridViewItemImage.Refresh();         
+                }
+            }
         }
 
         private void BtnRemoveImage_Click(object sender, EventArgs e)

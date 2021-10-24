@@ -38,22 +38,22 @@ namespace AutoClickByImage
             this.comboBoxDevices = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridViewItemImage = new System.Windows.Forms.DataGridView();
+            this.orderIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pathFileImageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.modeClickDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.itemImageBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.BtnAddImage = new System.Windows.Forms.Button();
             this.BtnRemoveImage = new System.Windows.Forms.Button();
             this.pictureBoxDisplay = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.labelthreshold = new System.Windows.Forms.Label();
             this.numericUpDownThreshold = new System.Windows.Forms.NumericUpDown();
-            this.orderIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pathFileImageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.modeClickDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.itemImageBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.itemImageBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItemImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -135,6 +135,32 @@ namespace AutoClickByImage
             this.dataGridViewItemImage.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewItemImage.Size = new System.Drawing.Size(361, 203);
             this.dataGridViewItemImage.TabIndex = 8;
+            this.dataGridViewItemImage.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewItemImage_CellDoubleClick);
+            // 
+            // orderIdDataGridViewTextBoxColumn
+            // 
+            this.orderIdDataGridViewTextBoxColumn.DataPropertyName = "orderId";
+            this.orderIdDataGridViewTextBoxColumn.HeaderText = "Order Id";
+            this.orderIdDataGridViewTextBoxColumn.Name = "orderIdDataGridViewTextBoxColumn";
+            this.orderIdDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // pathFileImageDataGridViewTextBoxColumn
+            // 
+            this.pathFileImageDataGridViewTextBoxColumn.DataPropertyName = "pathFileImage";
+            this.pathFileImageDataGridViewTextBoxColumn.HeaderText = "File Image";
+            this.pathFileImageDataGridViewTextBoxColumn.Name = "pathFileImageDataGridViewTextBoxColumn";
+            this.pathFileImageDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // modeClickDataGridViewTextBoxColumn
+            // 
+            this.modeClickDataGridViewTextBoxColumn.DataPropertyName = "modeClick";
+            this.modeClickDataGridViewTextBoxColumn.HeaderText = "Mode Click";
+            this.modeClickDataGridViewTextBoxColumn.Name = "modeClickDataGridViewTextBoxColumn";
+            this.modeClickDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // itemImageBindingSource1
+            // 
+            this.itemImageBindingSource1.DataSource = typeof(AutoClickByImage.model.ItemImage);
             // 
             // BtnAddImage
             // 
@@ -213,31 +239,6 @@ namespace AutoClickByImage
             0,
             131072});
             // 
-            // orderIdDataGridViewTextBoxColumn
-            // 
-            this.orderIdDataGridViewTextBoxColumn.DataPropertyName = "orderId";
-            this.orderIdDataGridViewTextBoxColumn.HeaderText = "Order Id";
-            this.orderIdDataGridViewTextBoxColumn.Name = "orderIdDataGridViewTextBoxColumn";
-            this.orderIdDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // pathFileImageDataGridViewTextBoxColumn
-            // 
-            this.pathFileImageDataGridViewTextBoxColumn.DataPropertyName = "pathFileImage";
-            this.pathFileImageDataGridViewTextBoxColumn.HeaderText = "File Image";
-            this.pathFileImageDataGridViewTextBoxColumn.Name = "pathFileImageDataGridViewTextBoxColumn";
-            this.pathFileImageDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // modeClickDataGridViewTextBoxColumn
-            // 
-            this.modeClickDataGridViewTextBoxColumn.DataPropertyName = "modeClick";
-            this.modeClickDataGridViewTextBoxColumn.HeaderText = "Mode Click";
-            this.modeClickDataGridViewTextBoxColumn.Name = "modeClickDataGridViewTextBoxColumn";
-            this.modeClickDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // itemImageBindingSource1
-            // 
-            this.itemImageBindingSource1.DataSource = typeof(AutoClickByImage.model.ItemImage);
-            // 
             // itemImageBindingSource
             // 
             this.itemImageBindingSource.DataSource = typeof(AutoClickByImage.model.ItemImage);
@@ -264,10 +265,10 @@ namespace AutoClickByImage
             this.Text = "AutoClickByImage";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItemImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).EndInit();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

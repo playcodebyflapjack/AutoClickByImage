@@ -19,12 +19,7 @@ namespace AutoClickByImage.model
             
         }
 
-        public ItemImage(int orderId, string pathFileImage, string modeClick)
-        {
-            this.orderId = orderId;
-            this.pathFileImage = pathFileImage;
-            this.modeClick = modeClick;
-        }
+       
 
 
     }

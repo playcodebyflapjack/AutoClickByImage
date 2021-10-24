@@ -19,6 +19,7 @@ namespace AutoClickByImage
         public ImageForm(string showMode, ItemImage itemImage)
         {
             InitializeComponent();
+
             this.buttonConfirm.Text = showMode;
             this.labelValueOrderId.Text = itemImage.orderId.ToString();
             this.itemImage = itemImage;
@@ -26,8 +27,19 @@ namespace AutoClickByImage
             this.comboBoxModeClick.Items.AddRange(new object[] {
             Messages.MESSAGE_SINGLE_MODE_CLICK,
             Messages.MESSAGE_MULTI_MODE_CLICK});
-            this.comboBoxModeClick.SelectedIndex = 0;
+
+            if (showMode == "Add")
+            {
+                this.comboBoxModeClick.SelectedIndex = 0;
+            }
+            else
+            {
+                this.textBoxPathFileImage.Text = itemImage.pathFileImage;
+                this.comboBoxModeClick.SelectedItem = itemImage.modeClick;
+            }
+
         }
+ 
 
         private void buttonOpenFileImage_Click(object sender, EventArgs e)
         {
