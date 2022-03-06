@@ -1,4 +1,5 @@
-﻿using AutoClickByImage.model;
+﻿using AutoClickByImage.exception;
+using AutoClickByImage.model;
 using BotAutoFindItem.model;
 using CliWrap;
 using System;
@@ -11,14 +12,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace AutoClickByImage
+namespace AutoClickByImage.service
 {
     class ShellADBCLI
     {
         private string pathFileAdb;
         private SearchImage serviceSearchImage;
        
-
         private ShellADBCLI()
         {
 
@@ -140,7 +140,7 @@ namespace AutoClickByImage
 
         }
 
-        public async Task<bool> SingleClickByImage(string device , string  pathImageSearch,double accuracy)
+        public async Task<bool> SingleClickByImage(string device , string  pathImageSearch,double accuracy ,bool debug = false)
         {
             if (!String.IsNullOrEmpty(device))
             {
@@ -152,7 +152,7 @@ namespace AutoClickByImage
                     bitmapOriginal  = new Bitmap(pathFileOriginal);
                     bitmapSearch    = new Bitmap(pathImageSearch);
 
-                    PositionMatch position = serviceSearchImage.SingleSearchImage(bitmapOriginal, bitmapSearch, accuracy);
+                    PositionMatch position = serviceSearchImage.SingleSearchImage(bitmapOriginal, bitmapSearch, accuracy, debug);
 
                     if (position != null)
                     {
@@ -168,7 +168,11 @@ namespace AutoClickByImage
                     }
                    
                 }
-                catch(Exception error)
+                catch (OpenCvException error)
+                {
+                    throw error;
+                }
+                catch (Exception error)
                 {
                     throw error;
                 }
@@ -190,7 +194,7 @@ namespace AutoClickByImage
         }
 
 
-        public async Task<bool> MutiClickByImage(string device, string pathImageSearch, double accuracy)
+        public async Task<bool> MutiClickByImage(string device, string pathImageSearch, double accuracy, bool debug = false)
         {
             if (!String.IsNullOrEmpty(device))
             {
@@ -202,7 +206,7 @@ namespace AutoClickByImage
                     bitmapOriginal = new Bitmap(pathFileOriginal);
                     bitmapSearch = new Bitmap(pathImageSearch);
 
-                    List<PositionMatch> listPosition = serviceSearchImage.MutiSearchImages(bitmapOriginal, bitmapSearch, accuracy);
+                    List<PositionMatch> listPosition = serviceSearchImage.MutiSearchImages(bitmapOriginal, bitmapSearch, accuracy, debug);
                     int size = listPosition.Count;
 
                     if (size > 0 )
@@ -223,6 +227,10 @@ namespace AutoClickByImage
                         return false;
                     }
 
+                }
+                catch (OpenCvException error)
+                {
+                    throw error;
                 }
                 catch (Exception error)
                 {

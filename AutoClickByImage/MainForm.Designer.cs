@@ -34,26 +34,28 @@ namespace AutoClickByImage
             this.buttonEnd = new System.Windows.Forms.Button();
             this.findFileAdb = new System.Windows.Forms.OpenFileDialog();
             this.buttonopenfileadb = new System.Windows.Forms.Button();
-            this.txtBoxPathADB = new System.Windows.Forms.TextBox();
             this.comboBoxDevices = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.dataGridViewItemImage = new System.Windows.Forms.DataGridView();
             this.orderIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pathFileImageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.modeClickDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.threshold = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.itemImageBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.BtnAddImage = new System.Windows.Forms.Button();
             this.BtnRemoveImage = new System.Windows.Forms.Button();
             this.pictureBoxDisplay = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.labelthreshold = new System.Windows.Forms.Label();
-            this.numericUpDownThreshold = new System.Windows.Forms.NumericUpDown();
+            this.groupBoxTarget = new System.Windows.Forms.GroupBox();
+            this.comboBoxProcess = new System.Windows.Forms.ComboBox();
+            this.radioButtonProcess = new System.Windows.Forms.RadioButton();
+            this.radioButtonADB = new System.Windows.Forms.RadioButton();
             this.itemImageBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.checkBoxDebugimage = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItemImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
+            this.groupBoxTarget.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,39 +86,21 @@ namespace AutoClickByImage
             // 
             // buttonopenfileadb
             // 
-            this.buttonopenfileadb.Location = new System.Drawing.Point(12, 32);
+            this.buttonopenfileadb.Location = new System.Drawing.Point(249, 22);
             this.buttonopenfileadb.Name = "buttonopenfileadb";
-            this.buttonopenfileadb.Size = new System.Drawing.Size(68, 24);
+            this.buttonopenfileadb.Size = new System.Drawing.Size(68, 22);
             this.buttonopenfileadb.TabIndex = 2;
             this.buttonopenfileadb.Text = "Browse";
             this.buttonopenfileadb.UseVisualStyleBackColor = true;
             this.buttonopenfileadb.Click += new System.EventHandler(this.buttonopenfileadb_Click);
             // 
-            // txtBoxPathADB
-            // 
-            this.txtBoxPathADB.Location = new System.Drawing.Point(86, 32);
-            this.txtBoxPathADB.Multiline = true;
-            this.txtBoxPathADB.Name = "txtBoxPathADB";
-            this.txtBoxPathADB.ReadOnly = true;
-            this.txtBoxPathADB.Size = new System.Drawing.Size(293, 24);
-            this.txtBoxPathADB.TabIndex = 3;
-            // 
             // comboBoxDevices
             // 
             this.comboBoxDevices.FormattingEnabled = true;
-            this.comboBoxDevices.Location = new System.Drawing.Point(86, 78);
+            this.comboBoxDevices.Location = new System.Drawing.Point(71, 23);
             this.comboBoxDevices.Name = "comboBoxDevices";
             this.comboBoxDevices.Size = new System.Drawing.Size(172, 21);
             this.comboBoxDevices.TabIndex = 4;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(28, 81);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Device";
             // 
             // dataGridViewItemImage
             // 
@@ -126,9 +110,10 @@ namespace AutoClickByImage
             this.dataGridViewItemImage.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.orderIdDataGridViewTextBoxColumn,
             this.pathFileImageDataGridViewTextBoxColumn,
-            this.modeClickDataGridViewTextBoxColumn});
+            this.modeClickDataGridViewTextBoxColumn,
+            this.threshold});
             this.dataGridViewItemImage.DataSource = this.itemImageBindingSource1;
-            this.dataGridViewItemImage.Location = new System.Drawing.Point(18, 222);
+            this.dataGridViewItemImage.Location = new System.Drawing.Point(18, 226);
             this.dataGridViewItemImage.MultiSelect = false;
             this.dataGridViewItemImage.Name = "dataGridViewItemImage";
             this.dataGridViewItemImage.ReadOnly = true;
@@ -158,13 +143,20 @@ namespace AutoClickByImage
             this.modeClickDataGridViewTextBoxColumn.Name = "modeClickDataGridViewTextBoxColumn";
             this.modeClickDataGridViewTextBoxColumn.ReadOnly = true;
             // 
+            // threshold
+            // 
+            this.threshold.DataPropertyName = "threshold";
+            this.threshold.HeaderText = "Threshold";
+            this.threshold.Name = "threshold";
+            this.threshold.ReadOnly = true;
+            // 
             // itemImageBindingSource1
             // 
             this.itemImageBindingSource1.DataSource = typeof(AutoClickByImage.model.ItemImage);
             // 
             // BtnAddImage
             // 
-            this.BtnAddImage.Location = new System.Drawing.Point(417, 222);
+            this.BtnAddImage.Location = new System.Drawing.Point(417, 226);
             this.BtnAddImage.Name = "BtnAddImage";
             this.BtnAddImage.Size = new System.Drawing.Size(81, 23);
             this.BtnAddImage.TabIndex = 9;
@@ -174,7 +166,7 @@ namespace AutoClickByImage
             // 
             // BtnRemoveImage
             // 
-            this.BtnRemoveImage.Location = new System.Drawing.Point(417, 265);
+            this.BtnRemoveImage.Location = new System.Drawing.Point(417, 269);
             this.BtnRemoveImage.Name = "BtnRemoveImage";
             this.BtnRemoveImage.Size = new System.Drawing.Size(81, 23);
             this.BtnRemoveImage.TabIndex = 10;
@@ -194,70 +186,85 @@ namespace AutoClickByImage
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.pictureBoxDisplay);
-            this.groupBox1.Location = new System.Drawing.Point(18, 117);
+            this.groupBox1.Location = new System.Drawing.Point(18, 121);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(200, 99);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Current Image";
             // 
-            // labelthreshold
+            // groupBoxTarget
             // 
-            this.labelthreshold.AutoSize = true;
-            this.labelthreshold.Location = new System.Drawing.Point(224, 162);
-            this.labelthreshold.Name = "labelthreshold";
-            this.labelthreshold.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.labelthreshold.Size = new System.Drawing.Size(54, 13);
-            this.labelthreshold.TabIndex = 13;
-            this.labelthreshold.Text = "Threshold";
+            this.groupBoxTarget.Controls.Add(this.comboBoxProcess);
+            this.groupBoxTarget.Controls.Add(this.radioButtonProcess);
+            this.groupBoxTarget.Controls.Add(this.radioButtonADB);
+            this.groupBoxTarget.Controls.Add(this.comboBoxDevices);
+            this.groupBoxTarget.Controls.Add(this.buttonopenfileadb);
+            this.groupBoxTarget.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxTarget.Name = "groupBoxTarget";
+            this.groupBoxTarget.Size = new System.Drawing.Size(367, 92);
+            this.groupBoxTarget.TabIndex = 16;
+            this.groupBoxTarget.TabStop = false;
+            this.groupBoxTarget.Text = "Target";
             // 
-            // numericUpDownThreshold
+            // comboBoxProcess
             // 
-            this.numericUpDownThreshold.DecimalPlaces = 2;
-            this.numericUpDownThreshold.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numericUpDownThreshold.Location = new System.Drawing.Point(284, 160);
-            this.numericUpDownThreshold.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownThreshold.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numericUpDownThreshold.Name = "numericUpDownThreshold";
-            this.numericUpDownThreshold.Size = new System.Drawing.Size(95, 20);
-            this.numericUpDownThreshold.TabIndex = 15;
-            this.numericUpDownThreshold.Value = new decimal(new int[] {
-            90,
-            0,
-            0,
-            131072});
+            this.comboBoxProcess.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxProcess.FormattingEnabled = true;
+            this.comboBoxProcess.Location = new System.Drawing.Point(71, 57);
+            this.comboBoxProcess.Name = "comboBoxProcess";
+            this.comboBoxProcess.Size = new System.Drawing.Size(172, 21);
+            this.comboBoxProcess.TabIndex = 8;
+            // 
+            // radioButtonProcess
+            // 
+            this.radioButtonProcess.AutoSize = true;
+            this.radioButtonProcess.Location = new System.Drawing.Point(6, 57);
+            this.radioButtonProcess.Name = "radioButtonProcess";
+            this.radioButtonProcess.Size = new System.Drawing.Size(63, 17);
+            this.radioButtonProcess.TabIndex = 7;
+            this.radioButtonProcess.Text = "Process";
+            this.radioButtonProcess.UseVisualStyleBackColor = true;
+            this.radioButtonProcess.CheckedChanged += new System.EventHandler(this.radioButtonProcess_CheckedChanged);
+            // 
+            // radioButtonADB
+            // 
+            this.radioButtonADB.AutoSize = true;
+            this.radioButtonADB.Checked = true;
+            this.radioButtonADB.Location = new System.Drawing.Point(6, 25);
+            this.radioButtonADB.Name = "radioButtonADB";
+            this.radioButtonADB.Size = new System.Drawing.Size(59, 17);
+            this.radioButtonADB.TabIndex = 6;
+            this.radioButtonADB.TabStop = true;
+            this.radioButtonADB.Text = "Device";
+            this.radioButtonADB.UseVisualStyleBackColor = true;
+            this.radioButtonADB.CheckedChanged += new System.EventHandler(this.radioButtonADB_CheckedChanged);
             // 
             // itemImageBindingSource
             // 
             this.itemImageBindingSource.DataSource = typeof(AutoClickByImage.model.ItemImage);
             // 
+            // checkBoxDebugimage
+            // 
+            this.checkBoxDebugimage.AutoSize = true;
+            this.checkBoxDebugimage.Location = new System.Drawing.Point(233, 129);
+            this.checkBoxDebugimage.Name = "checkBoxDebugimage";
+            this.checkBoxDebugimage.Size = new System.Drawing.Size(87, 17);
+            this.checkBoxDebugimage.TabIndex = 17;
+            this.checkBoxDebugimage.Text = "debug image";
+            this.checkBoxDebugimage.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(510, 446);
-            this.Controls.Add(this.numericUpDownThreshold);
-            this.Controls.Add(this.labelthreshold);
+            this.ClientSize = new System.Drawing.Size(510, 437);
+            this.Controls.Add(this.checkBoxDebugimage);
+            this.Controls.Add(this.groupBoxTarget);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.BtnRemoveImage);
             this.Controls.Add(this.BtnAddImage);
             this.Controls.Add(this.dataGridViewItemImage);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBoxDevices);
-            this.Controls.Add(this.txtBoxPathADB);
-            this.Controls.Add(this.buttonopenfileadb);
             this.Controls.Add(this.buttonEnd);
             this.Controls.Add(this.buttonStart);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -268,7 +275,8 @@ namespace AutoClickByImage
             ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).EndInit();
             this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).EndInit();
+            this.groupBoxTarget.ResumeLayout(false);
+            this.groupBoxTarget.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -281,9 +289,7 @@ namespace AutoClickByImage
     private System.Windows.Forms.Button buttonEnd;
     private System.Windows.Forms.OpenFileDialog findFileAdb;
     private System.Windows.Forms.Button buttonopenfileadb;
-    private System.Windows.Forms.TextBox txtBoxPathADB;
     private System.Windows.Forms.ComboBox comboBoxDevices;
-    private System.Windows.Forms.Label label1;
         private System.Windows.Forms.BindingSource itemImageBindingSource;
         private System.Windows.Forms.BindingSource itemImageBindingSource1;
         private System.Windows.Forms.DataGridView dataGridViewItemImage;
@@ -291,11 +297,15 @@ namespace AutoClickByImage
         private System.Windows.Forms.Button BtnRemoveImage;
         private System.Windows.Forms.PictureBox pictureBoxDisplay;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label labelthreshold;
-        private System.Windows.Forms.NumericUpDown numericUpDownThreshold;
         private System.Windows.Forms.DataGridViewTextBoxColumn orderIdDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn pathFileImageDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn modeClickDataGridViewTextBoxColumn;
+        private System.Windows.Forms.GroupBox groupBoxTarget;
+        private System.Windows.Forms.ComboBox comboBoxProcess;
+        private System.Windows.Forms.RadioButton radioButtonProcess;
+        private System.Windows.Forms.RadioButton radioButtonADB;
+        private System.Windows.Forms.DataGridViewTextBoxColumn threshold;
+        private System.Windows.Forms.CheckBox checkBoxDebugimage;
     }
 }
 

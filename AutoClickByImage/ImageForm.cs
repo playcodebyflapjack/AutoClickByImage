@@ -36,6 +36,7 @@ namespace AutoClickByImage
             {
                 this.textBoxPathFileImage.Text = itemImage.pathFileImage;
                 this.comboBoxModeClick.SelectedItem = itemImage.modeClick;
+                this.numericUpDownThreshold.Value = System.Convert.ToDecimal(itemImage.threshold);
             }
 
         }
@@ -57,6 +58,7 @@ namespace AutoClickByImage
             this.itemImage.orderId       = itemImage.orderId;
             this.itemImage.pathFileImage = textBoxPathFileImage.Text;
             this.itemImage.modeClick     = comboBoxModeClick.SelectedItem.ToString();
+            this.itemImage.threshold     =  ((double)numericUpDownThreshold.Value);
         }
  
     }

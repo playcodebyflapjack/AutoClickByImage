@@ -1,6 +1,12 @@
-﻿using AutoClickByImage.model;
+﻿using AutoClickByImage.exception;
+using AutoClickByImage.model;
+using AutoClickByImage.service;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,6 +20,8 @@ namespace AutoClickByImage
         private CancellationTokenSource _canceller;
         private ShellADBCLI serviceADB;
         private SearchImage serviceSearchImage;
+        private ScreenCapture serviceWindowsClick;
+        private ManagementClickWindows serviceMangementClickWindows;
 
         private int indexImage;
         private int indexOrderId;
@@ -23,6 +31,8 @@ namespace AutoClickByImage
         {
             InitializeComponent();
             this.serviceSearchImage = new SearchImage();
+            this.serviceWindowsClick = new ScreenCapture();
+            this.serviceMangementClickWindows = new ManagementClickWindows(serviceWindowsClick, serviceSearchImage);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -33,92 +43,145 @@ namespace AutoClickByImage
 
         private async void button1_Click(object sender, EventArgs e)
         {
+          
+            string target = string.Empty;
+            int errorTarget = -1; 
 
-
-            string device = this.comboBoxDevices.SelectedItem != null ? comboBoxDevices.SelectedItem.ToString() : "";
-
-            if (string.IsNullOrEmpty(device))
+            if (radioButtonProcess.Checked)
             {
-                MessageBox.Show(
-                    Messages.ERROR_MESSAGE_PATH_IP_DEVICE_NOT_FOUND,
-                    Messages.ERROR_MESSAGE_TITLE);
-                return;
+                target = this.comboBoxProcess.SelectedIndex.ToString();
+                errorTarget = 1;
             }
 
+            if (radioButtonADB.Checked)
+            {
+                target = this.comboBoxDevices.SelectedIndex.ToString();
+                errorTarget = 2;
+            }
+
+            if (string.IsNullOrEmpty(target))
+            {
+                if (errorTarget == 1)
+                {
+                    MessageBox.Show(
+                       Messages.ERROR_MESSAGE_TARGET_WINDOW_NOT_FOUND,
+                       Messages.ERROR_MESSAGE_TITLE);
+                }
+                else
+                {
+                    MessageBox.Show(
+                       Messages.ERROR_MESSAGE_PATH_IP_DEVICE_NOT_FOUND,
+                       Messages.ERROR_MESSAGE_TITLE);
+                }
+                    return;
+            }
 
             disableComponent();
 
-
             _canceller = new CancellationTokenSource();
 
-        
-            double threshold = ((double)numericUpDownThreshold.Value);
             int sizeBindingSource = itemImageBindingSource1.Count;
             indexImage = 0;
-
-            try
-            {
 
                 await Task.Run(async () =>
                 {
                     do
                     {
-
-                        if (dataGridViewItemImage.RowCount > 0)
+                        try
                         {
-                            itemImageBindingSource1.Position = indexImage;
 
-                            ItemImage item =  (ItemImage)itemImageBindingSource1.Current;
-
-                            Bitmap imageShow = new Bitmap(item.pathFileImage);
-
-
-                            pictureBoxDisplay.Image = imageShow;
-
-                            bool clickIconGame = false;
-
-                            if (Messages.MESSAGE_SINGLE_MODE_CLICK.Equals(item.modeClick))
+                            if (dataGridViewItemImage.RowCount > 0)
                             {
-                                clickIconGame = await serviceADB.SingleClickByImage(device, item.pathFileImage, threshold);
-                            }
-                            else 
-                            {
-                                clickIconGame = await serviceADB.MutiClickByImage(device, item.pathFileImage, threshold);
+                                itemImageBindingSource1.Position = indexImage;
+
+                                ItemImage item = (ItemImage)itemImageBindingSource1.Current;
+
+                                Bitmap imageShow = new Bitmap(item.pathFileImage);
+
+
+                                pictureBoxDisplay.Image = imageShow;
+
+                                bool isClick = false;
+
+                                if (radioButtonProcess.Checked)
+                                {
+                                    isClick = clickWindows(target, item);
+                                }
+                                else
+                                {
+                                    isClick = await clickAdbAsync(target, item);
+                                }
+
+
+                                if (isClick)
+                                {
+                                    indexImage++;
+                                }
+
                             }
 
-                           
-                            if (clickIconGame)
+
+                            if (_canceller.Token.IsCancellationRequested || indexImage == sizeBindingSource)
                             {
-                                Console.WriteLine(item.pathFileImage);
-                                indexImage++;
+                                break;
                             }
 
+                        }
+                        catch (OpenCvException error)
+                        {
+                             MessageBox.Show(
+                       Messages.ERROR_MESSAGE_CHANGE_PROCESS,
+                       Messages.ERROR_MESSAGE_TITLE);
+                            break;
+                        }
+                        catch (Exception error)
+                        {
+                            Console.WriteLine(error);
+                            Console.WriteLine(error.Message);
                         }
 
                        
-                        if (_canceller.Token.IsCancellationRequested || indexImage == sizeBindingSource)
-                        {
-                            break;
-                        }
-      
 
                     } while (true);
                 });
 
-
-
                 _canceller.Dispose();
-              
 
                 enableComponent();
+        }
 
-            }
-            catch (Exception error)
+        private bool clickWindows(string target, ItemImage item)
+        {
+            string image = item.pathFileImage;
+            double threshold = item.threshold;
+            ItemProcess itemSelectProcess = getValueComboBoxProcess();
+            IntPtr handle = itemSelectProcess.valueHandle;
+
+            return serviceMangementClickWindows.SingleClickByImage(handle, image, threshold, this.checkBoxDebugimage.Checked);
+        }
+
+        private ItemProcess getValueComboBoxProcess()
+        {
+            if (comboBoxProcess.InvokeRequired)
+                return (ItemProcess)comboBoxProcess.Invoke(new Func<ItemProcess>(getValueComboBoxProcess));
+            else
+                return (ItemProcess)comboBoxProcess.SelectedItem ;
+        }
+
+
+        private async Task<bool> clickAdbAsync(string target,ItemImage item )
+        {
+            string image = item.pathFileImage;
+            double threshold = item.threshold;
+
+            if (Messages.MESSAGE_SINGLE_MODE_CLICK.Equals(item.modeClick))
             {
-                throw error;
+                return await serviceADB.SingleClickByImage(target, image, threshold, this.checkBoxDebugimage.Checked);
             }
-
-
+            else
+            {
+                return await serviceADB.MutiClickByImage(target, image, threshold, this.checkBoxDebugimage.Checked);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -132,9 +195,6 @@ namespace AutoClickByImage
             if (findFileAdb.ShowDialog() == DialogResult.OK)
             {
                 string fullFilePathADB = findFileAdb.FileName;
-
-                this.txtBoxPathADB.Text = fullFilePathADB;
-
                 this.serviceADB = new ShellADBCLI(fullFilePathADB, serviceSearchImage);
                 string[] listOfDevices = await serviceADB.GetListOfIp();
 
@@ -200,7 +260,7 @@ namespace AutoClickByImage
 
             buttonopenfileadb.Enabled = false;
             comboBoxDevices.Enabled = false;
-            numericUpDownThreshold.Enabled = false;
+        
             BtnAddImage.Enabled = false;
             BtnRemoveImage.Enabled = false;
         }
@@ -212,9 +272,48 @@ namespace AutoClickByImage
 
             buttonopenfileadb.Enabled = true;
             comboBoxDevices.Enabled = true;
-            numericUpDownThreshold.Enabled = true;
+          
             BtnAddImage.Enabled = true;
             BtnRemoveImage.Enabled = true;
         }
+
+        private void radioButtonADB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonADB.Checked)
+            {
+                comboBoxProcess.Items.Clear();
+                comboBoxProcess.ResetText();
+              
+
+                comboBoxDevices.DropDownStyle = ComboBoxStyle.DropDown;
+                comboBoxProcess.DropDownStyle = ComboBoxStyle.DropDownList;
+
+
+                buttonopenfileadb.Enabled = true;
+            }
+        }
+
+        private void radioButtonProcess_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonProcess.Checked)
+            {
+                buttonopenfileadb.Enabled = false;
+                comboBoxProcess.DropDownStyle = ComboBoxStyle.DropDown;
+                comboBoxDevices.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                comboBoxProcess.Items.Clear();
+                ItemProcess[] listProcess = serviceWindowsClick.getListProcess();
+                comboBoxProcess.Items.AddRange(listProcess);
+
+                if (listProcess.Length > 0)
+                {
+                    comboBoxProcess.SelectedIndex = 0;
+                }
+
+            }
+        }
+
+       
+    
     }
 }
