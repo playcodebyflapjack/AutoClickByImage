@@ -12,6 +12,6 @@
 * Not support Browser (capture windows)
 
 ### Reference:
-(openvc):https://github.com/itsmeny/Image_Match <br />
+(openvc) https://github.com/itsmeny/Image_Match <br />
 (capturing windows) http://www.digipine.com/index.php?mid=windowsmfc&document_srl=631 <br />
-(stop task )https://stackoverflow.com/a/27580333/3990026 <br />
+(stop task) https://stackoverflow.com/a/27580333/3990026 <br />
