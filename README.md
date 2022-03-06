@@ -10,6 +10,7 @@
 
 ### Remark
 * Not support Browser (capture windows)
+* etc ...
 
 ### Reference:
 (openvc) https://github.com/itsmeny/Image_Match <br />
