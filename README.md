@@ -1,7 +1,7 @@
 ### Build
 0. clone project from link this <br />
 1. open project AutoClickByImage.sln <br />
-2. goto change 'Platform target' select x86  <br />
+2. goto setting change 'Platform target' select x86  <br />
 3. manage nuget (install) <br />
    -CliWarp: 3.3.3 <br />
    -Emgu.CV: 4.5.3 <br />
