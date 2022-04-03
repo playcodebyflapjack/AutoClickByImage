@@ -49,9 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="calldll\CallCoreDll.cs" />
     <Compile Include="calldll\CallGDI32Dll.cs" />
     <Compile Include="calldll\CallUser32Dll.cs" />
+    <Compile Include="DebugForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DebugForm.Designer.cs">
+      <DependentUpon>DebugForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="exception\OpenCvException.cs" />
     <Compile Include="ImageForm.cs">
       <SubType>Form</SubType>
@@ -75,6 +80,9 @@
     <Compile Include="service\SearchImage.cs" />
     <Compile Include="service\ShellADBCLI.cs" />
     <Compile Include="service\ScreenCapture.cs" />
+    <EmbeddedResource Include="DebugForm.resx">
+      <DependentUpon>DebugForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ImageForm.resx">
       <DependentUpon>ImageForm.cs</DependentUpon>
     </EmbeddedResource>

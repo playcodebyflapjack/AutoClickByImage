@@ -50,7 +50,8 @@ namespace AutoClickByImage
             this.radioButtonProcess = new System.Windows.Forms.RadioButton();
             this.radioButtonADB = new System.Windows.Forms.RadioButton();
             this.itemImageBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.checkBoxDebugimage = new System.Windows.Forms.CheckBox();
+            this.cbDebugSaveImage = new System.Windows.Forms.CheckBox();
+            this.cbdebugDrawingWindows = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItemImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.itemImageBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).BeginInit();
@@ -244,22 +245,34 @@ namespace AutoClickByImage
             // 
             this.itemImageBindingSource.DataSource = typeof(AutoClickByImage.model.ItemImage);
             // 
-            // checkBoxDebugimage
+            // cbDebugSaveImage
             // 
-            this.checkBoxDebugimage.AutoSize = true;
-            this.checkBoxDebugimage.Location = new System.Drawing.Point(233, 129);
-            this.checkBoxDebugimage.Name = "checkBoxDebugimage";
-            this.checkBoxDebugimage.Size = new System.Drawing.Size(87, 17);
-            this.checkBoxDebugimage.TabIndex = 17;
-            this.checkBoxDebugimage.Text = "debug image";
-            this.checkBoxDebugimage.UseVisualStyleBackColor = true;
+            this.cbDebugSaveImage.AutoSize = true;
+            this.cbDebugSaveImage.Location = new System.Drawing.Point(233, 129);
+            this.cbDebugSaveImage.Name = "cbDebugSaveImage";
+            this.cbDebugSaveImage.Size = new System.Drawing.Size(150, 17);
+            this.cbDebugSaveImage.TabIndex = 17;
+            this.cbDebugSaveImage.Text = "debug image (save image)";
+            this.cbDebugSaveImage.UseVisualStyleBackColor = true;
+            // 
+            // cbdebugDrawingWindows
+            // 
+            this.cbdebugDrawingWindows.AutoSize = true;
+            this.cbdebugDrawingWindows.Enabled = false;
+            this.cbdebugDrawingWindows.Location = new System.Drawing.Point(233, 152);
+            this.cbdebugDrawingWindows.Name = "cbdebugDrawingWindows";
+            this.cbdebugDrawingWindows.Size = new System.Drawing.Size(177, 17);
+            this.cbdebugDrawingWindows.TabIndex = 18;
+            this.cbdebugDrawingWindows.Text = "debug image (drawing windows)";
+            this.cbdebugDrawingWindows.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(510, 437);
-            this.Controls.Add(this.checkBoxDebugimage);
+            this.Controls.Add(this.cbdebugDrawingWindows);
+            this.Controls.Add(this.cbDebugSaveImage);
             this.Controls.Add(this.groupBoxTarget);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.BtnRemoveImage);
@@ -305,7 +318,8 @@ namespace AutoClickByImage
         private System.Windows.Forms.RadioButton radioButtonProcess;
         private System.Windows.Forms.RadioButton radioButtonADB;
         private System.Windows.Forms.DataGridViewTextBoxColumn threshold;
-        private System.Windows.Forms.CheckBox checkBoxDebugimage;
+        private System.Windows.Forms.CheckBox cbDebugSaveImage;
+        private System.Windows.Forms.CheckBox cbdebugDrawingWindows;
     }
 }
 

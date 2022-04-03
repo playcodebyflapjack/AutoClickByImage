@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoClickByImage.calldll
 {
@@ -25,5 +21,8 @@ namespace AutoClickByImage.calldll
         public static extern bool DeleteObject(IntPtr hObject);
         [DllImport("gdi32.dll")]
         public static extern IntPtr SelectObject(IntPtr hDC, IntPtr hObject);
+
+        [DllImport("gdi32.dll")]
+        public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
     }
 }

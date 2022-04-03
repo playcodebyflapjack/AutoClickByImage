@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoClickByImage.calldll
 {
@@ -18,6 +14,12 @@ namespace AutoClickByImage.calldll
             public int Bottom;
         }
 
+        [DllImport("User32.dll")]
+        public static extern Int32 SendMessage(
+            IntPtr hWnd,               // handle to destination window
+            int Msg,                // message
+            int wParam,             // first message parameter
+            int lParam);			// second message parameter
 
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("user32.dll", SetLastError = true)]
@@ -46,8 +48,6 @@ namespace AutoClickByImage.calldll
             KEY_MBUTTON = 0x04, //Middle mouse button (three-button mouse) 
         }
 
-
-
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowRect(IntPtr hWnd, ref Rect rect);
 
@@ -65,5 +65,13 @@ namespace AutoClickByImage.calldll
 
         [DllImport("user32.dll")]
         public static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+        [DllImport("User32.dll")]
+        public static extern IntPtr GetDC(IntPtr hwnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
+
+
     }
 }

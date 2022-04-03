@@ -2,11 +2,7 @@
 using AutoClickByImage.model;
 using AutoClickByImage.service;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -43,9 +39,9 @@ namespace AutoClickByImage
 
         private async void button1_Click(object sender, EventArgs e)
         {
-          
+
             string target = string.Empty;
-            int errorTarget = -1; 
+            int errorTarget = -1;
 
             if (radioButtonProcess.Checked)
             {
@@ -73,7 +69,7 @@ namespace AutoClickByImage
                        Messages.ERROR_MESSAGE_PATH_IP_DEVICE_NOT_FOUND,
                        Messages.ERROR_MESSAGE_TITLE);
                 }
-                    return;
+                return;
             }
 
             disableComponent();
@@ -83,81 +79,100 @@ namespace AutoClickByImage
             int sizeBindingSource = itemImageBindingSource1.Count;
             indexImage = 0;
 
-                await Task.Run(async () =>
+            await Task.Run(async () =>
+            {
+                do
                 {
-                    do
+                    try
                     {
-                        try
+
+                        if (dataGridViewItemImage.RowCount > 0)
                         {
+                            itemImageBindingSource1.Position = indexImage;
 
-                            if (dataGridViewItemImage.RowCount > 0)
+                            ItemImage item = (ItemImage)itemImageBindingSource1.Current;
+
+                            Bitmap imageShow = new Bitmap(item.pathFileImage);
+
+                            pictureBoxDisplay.Image = imageShow;
+
+                            bool isClick = false;
+
+                            if (radioButtonProcess.Checked)
                             {
-                                itemImageBindingSource1.Position = indexImage;
-
-                                ItemImage item = (ItemImage)itemImageBindingSource1.Current;
-
-                                Bitmap imageShow = new Bitmap(item.pathFileImage);
-
-
-                                pictureBoxDisplay.Image = imageShow;
-
-                                bool isClick = false;
-
-                                if (radioButtonProcess.Checked)
-                                {
-                                    isClick = clickWindows(target, item);
-                                }
-                                else
-                                {
-                                    isClick = await clickAdbAsync(target, item);
-                                }
-
-
-                                if (isClick)
-                                {
-                                    indexImage++;
-                                }
-
+                                isClick = clickWindows(item);
+                            }
+                            else
+                            {
+                                isClick = await clickAdbAsync(target, item);
                             }
 
 
-                            if (_canceller.Token.IsCancellationRequested || indexImage == sizeBindingSource)
+                            if (isClick)
                             {
-                                break;
+                                indexImage++;
                             }
 
                         }
-                        catch (OpenCvException error)
+
+
+                        if (_canceller.Token.IsCancellationRequested || indexImage == sizeBindingSource)
                         {
-                             MessageBox.Show(
-                       Messages.ERROR_MESSAGE_CHANGE_PROCESS,
-                       Messages.ERROR_MESSAGE_TITLE);
                             break;
                         }
-                        catch (Exception error)
-                        {
-                            Console.WriteLine(error);
-                            Console.WriteLine(error.Message);
-                        }
 
-                       
+                    }
+                    catch (OpenCvException error)
+                    {
+                        MessageBox.Show(
+                          Messages.ERROR_MESSAGE_CHANGE_PROCESS,
+                          Messages.ERROR_MESSAGE_TITLE);
+                        break;
+                    }
+                    catch (Exception error)
+                    {
+                        MessageBox.Show(error.Message, Messages.ERROR_MESSAGE_TITLE);
+                         break;
+                    }
 
-                    } while (true);
-                });
 
-                _canceller.Dispose();
 
-                enableComponent();
+                } while (true);
+            });
+
+            _canceller.Dispose();
+
+            enableComponent();
         }
 
-        private bool clickWindows(string target, ItemImage item)
+        private bool clickWindows(ItemImage item)
         {
             string image = item.pathFileImage;
             double threshold = item.threshold;
             ItemProcess itemSelectProcess = getValueComboBoxProcess();
             IntPtr handle = itemSelectProcess.valueHandle;
 
-            return serviceMangementClickWindows.SingleClickByImage(handle, image, threshold, this.checkBoxDebugimage.Checked);
+            if (Messages.MESSAGE_SINGLE_MODE_CLICK.Equals(item.modeClick))
+            {
+                return serviceMangementClickWindows.SingleClickByImage(
+                      handle,
+                      image,
+                      threshold,
+                      this.cbDebugSaveImage.Checked,
+                      this.cbdebugDrawingWindows.Checked);
+            }
+            else
+            {
+                return serviceMangementClickWindows.MutiClickByImage(
+                       handle,
+                      image,
+                      threshold,
+                      this.cbDebugSaveImage.Checked,
+                      this.cbdebugDrawingWindows.Checked
+                    );
+            }
+
+
         }
 
         private ItemProcess getValueComboBoxProcess()
@@ -165,28 +180,28 @@ namespace AutoClickByImage
             if (comboBoxProcess.InvokeRequired)
                 return (ItemProcess)comboBoxProcess.Invoke(new Func<ItemProcess>(getValueComboBoxProcess));
             else
-                return (ItemProcess)comboBoxProcess.SelectedItem ;
+                return (ItemProcess)comboBoxProcess.SelectedItem;
         }
 
 
-        private async Task<bool> clickAdbAsync(string target,ItemImage item )
+        private async Task<bool> clickAdbAsync(string target, ItemImage item)
         {
             string image = item.pathFileImage;
             double threshold = item.threshold;
 
             if (Messages.MESSAGE_SINGLE_MODE_CLICK.Equals(item.modeClick))
             {
-                return await serviceADB.SingleClickByImage(target, image, threshold, this.checkBoxDebugimage.Checked);
+                return await serviceADB.SingleClickByImage(target, image, threshold, this.cbDebugSaveImage.Checked);
             }
             else
             {
-                return await serviceADB.MutiClickByImage(target, image, threshold, this.checkBoxDebugimage.Checked);
+                return await serviceADB.MutiClickByImage(target, image, threshold, this.cbDebugSaveImage.Checked);
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-                _canceller.Cancel();
+            _canceller.Cancel();
         }
 
         private async void buttonopenfileadb_Click(object sender, EventArgs e)
@@ -228,7 +243,7 @@ namespace AutoClickByImage
 
         private void dataGridViewItemImage_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-           
+
             ItemImage itemSelected = (ItemImage)itemImageBindingSource1[e.RowIndex];
 
             using (ImageForm imageform = new ImageForm("Edit", itemSelected))
@@ -236,7 +251,7 @@ namespace AutoClickByImage
                 if (imageform.ShowDialog() == DialogResult.OK)
                 {
                     dataGridViewItemImage.Update();
-                    dataGridViewItemImage.Refresh();         
+                    dataGridViewItemImage.Refresh();
                 }
             }
         }
@@ -249,7 +264,7 @@ namespace AutoClickByImage
                 dataGridViewItemImage.Update();
                 dataGridViewItemImage.Refresh();
             }
-          
+
         }
 
 
@@ -260,7 +275,7 @@ namespace AutoClickByImage
 
             buttonopenfileadb.Enabled = false;
             comboBoxDevices.Enabled = false;
-        
+
             BtnAddImage.Enabled = false;
             BtnRemoveImage.Enabled = false;
         }
@@ -272,7 +287,7 @@ namespace AutoClickByImage
 
             buttonopenfileadb.Enabled = true;
             comboBoxDevices.Enabled = true;
-          
+
             BtnAddImage.Enabled = true;
             BtnRemoveImage.Enabled = true;
         }
@@ -283,13 +298,15 @@ namespace AutoClickByImage
             {
                 comboBoxProcess.Items.Clear();
                 comboBoxProcess.ResetText();
-              
+
 
                 comboBoxDevices.DropDownStyle = ComboBoxStyle.DropDown;
                 comboBoxProcess.DropDownStyle = ComboBoxStyle.DropDownList;
 
 
                 buttonopenfileadb.Enabled = true;
+                cbdebugDrawingWindows.Checked = false;
+                cbdebugDrawingWindows.Enabled = false;
             }
         }
 
@@ -298,6 +315,7 @@ namespace AutoClickByImage
             if (radioButtonProcess.Checked)
             {
                 buttonopenfileadb.Enabled = false;
+                cbdebugDrawingWindows.Enabled = true;
                 comboBoxProcess.DropDownStyle = ComboBoxStyle.DropDown;
                 comboBoxDevices.DropDownStyle = ComboBoxStyle.DropDownList;
 
@@ -313,7 +331,6 @@ namespace AutoClickByImage
             }
         }
 
-       
-    
+
     }
 }

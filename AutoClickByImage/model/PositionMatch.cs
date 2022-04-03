@@ -1,6 +1,6 @@
 ﻿namespace BotAutoFindItem.model
 {
-    class PositionMatch
+    public class PositionMatch
     {
         public int x { get; }
         public int y { get; }

@@ -1,16 +1,12 @@
 ﻿using AutoClickByImage.calldll;
 using AutoClickByImage.model;
+using BotAutoFindItem.model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace AutoClickByImage.service
 {
@@ -24,16 +20,16 @@ namespace AutoClickByImage.service
             {
                 try
                 {
-                        ItemProcess item = new ItemProcess();
-                        string text = "[" + itemProcess.Id + "]" + " - " + itemProcess.ProcessName;
-                        IntPtr value = itemProcess.MainWindowHandle;
+                    ItemProcess item = new ItemProcess();
+                    string text = "[" + itemProcess.Id + "]" + " - " + itemProcess.ProcessName;
+                    IntPtr value = itemProcess.MainWindowHandle;
 
-                        item.displayText = text;
-                        item.valueHandle = value;
-                        item.processName = itemProcess.ProcessName;
+                    item.displayText = text;
+                    item.valueHandle = value;
+                    item.processName = itemProcess.ProcessName;
 
-                        list.Add(item);
-                   
+                    list.Add(item);
+
                 }
                 catch (Win32Exception error)
                 {
@@ -45,8 +41,8 @@ namespace AutoClickByImage.service
 
             return list.ToArray();
         }
- 
-        
+
+
         public Bitmap CaptureWindow(IntPtr handle)
         {
             // get te hDC of the target window
@@ -78,8 +74,49 @@ namespace AutoClickByImage.service
 
             return img;
         }
-      
-       
+
+        public void debugWindows(IntPtr handle, Size sizeImageSearch, PositionMatch position)
+        {
+            CallUser32Dll.Rect windowsInfo = new CallUser32Dll.Rect();
+
+            CallUser32Dll.GetWindowRect(handle, ref windowsInfo);
+
+            int width = windowsInfo.Right - windowsInfo.Left;
+            int height = windowsInfo.Bottom - windowsInfo.Top;
+
+            Point positionPoint = new Point(position.x, position.y);
+            Point location = new Point(windowsInfo.Left, windowsInfo.Top);
+            Size sizeForm = new Size(width, height);
+
+            DebugForm debugForm = new DebugForm(positionPoint, location, sizeForm, sizeImageSearch);
+
+            debugForm.Show();
+
+            Thread.Sleep(500);
+
+            debugForm.closeForm();
+        }
+
+        public void debugWindows(IntPtr handle, Size sizeImageSearch, List<PositionMatch> positions)
+        {
+            CallUser32Dll.Rect windowsInfo = new CallUser32Dll.Rect();
+
+            CallUser32Dll.GetWindowRect(handle, ref windowsInfo);
+
+            int width = windowsInfo.Right - windowsInfo.Left;
+            int height = windowsInfo.Bottom - windowsInfo.Top;
+
+            Point location = new Point(windowsInfo.Left, windowsInfo.Top);
+            Size sizeForm = new Size(width, height);
+
+            DebugForm debugForm = new DebugForm(positions, location, sizeForm, sizeImageSearch);
+
+            debugForm.Show();
+
+            Thread.Sleep(500);
+
+            debugForm.closeForm();
+        }
 
     }
 }

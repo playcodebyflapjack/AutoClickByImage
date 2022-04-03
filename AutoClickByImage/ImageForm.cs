@@ -1,12 +1,5 @@
 ﻿using AutoClickByImage.model;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoClickByImage
@@ -40,7 +33,7 @@ namespace AutoClickByImage
             }
 
         }
- 
+
 
         private void buttonOpenFileImage_Click(object sender, EventArgs e)
         {
@@ -55,11 +48,11 @@ namespace AutoClickByImage
 
         private void buttonConfirm_Click(object sender, EventArgs e)
         {
-            this.itemImage.orderId       = itemImage.orderId;
+            this.itemImage.orderId = itemImage.orderId;
             this.itemImage.pathFileImage = textBoxPathFileImage.Text;
-            this.itemImage.modeClick     = comboBoxModeClick.SelectedItem.ToString();
-            this.itemImage.threshold     =  ((double)numericUpDownThreshold.Value);
+            this.itemImage.modeClick = comboBoxModeClick.SelectedItem.ToString();
+            this.itemImage.threshold = ((double)numericUpDownThreshold.Value);
         }
- 
+
     }
 }

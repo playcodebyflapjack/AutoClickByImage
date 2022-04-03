@@ -1,13 +1,10 @@
 ﻿using AutoClickByImage.exception;
-using AutoClickByImage.model;
 using BotAutoFindItem.model;
 using CliWrap;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -18,7 +15,7 @@ namespace AutoClickByImage.service
     {
         private string pathFileAdb;
         private SearchImage serviceSearchImage;
-       
+
         private ShellADBCLI()
         {
 
@@ -75,7 +72,7 @@ namespace AutoClickByImage.service
                 for (int i = 0; i < size; i++)
                 {
                     MatchCollection m = pattern.Matches(lines[i]);
-                 
+
                     if (m.Count > 0)
                     {
                         result.Add(m[0].Value);
@@ -87,7 +84,7 @@ namespace AutoClickByImage.service
 
         private string getFolderTmpImage()
         {
-            string currentPathFolder =  Directory.GetCurrentDirectory();
+            string currentPathFolder = Directory.GetCurrentDirectory();
 
             string folderTmp = currentPathFolder + Path.DirectorySeparatorChar + "tmp";
 
@@ -102,9 +99,9 @@ namespace AutoClickByImage.service
 
         private async Task ExcuteComand(string commandparameter)
         {
-              await Cli.Wrap(this.pathFileAdb)
-               .WithArguments(commandparameter)
-               .ExecuteAsync();
+            await Cli.Wrap(this.pathFileAdb)
+             .WithArguments(commandparameter)
+             .ExecuteAsync();
         }
 
         private async Task<string> CaptureScreen(string device)
@@ -140,17 +137,17 @@ namespace AutoClickByImage.service
 
         }
 
-        public async Task<bool> SingleClickByImage(string device , string  pathImageSearch,double accuracy ,bool debug = false)
+        public async Task<bool> SingleClickByImage(string device, string pathImageSearch, double accuracy, bool debug = false)
         {
             if (!String.IsNullOrEmpty(device))
             {
                 Bitmap bitmapSearch = null, bitmapOriginal = null;
                 try
                 {
-                    string pathFileOriginal =  await CaptureScreen(device);
+                    string pathFileOriginal = await CaptureScreen(device);
 
-                    bitmapOriginal  = new Bitmap(pathFileOriginal);
-                    bitmapSearch    = new Bitmap(pathImageSearch);
+                    bitmapOriginal = new Bitmap(pathFileOriginal);
+                    bitmapSearch = new Bitmap(pathImageSearch);
 
                     PositionMatch position = serviceSearchImage.SingleSearchImage(bitmapOriginal, bitmapSearch, accuracy, debug);
 
@@ -166,7 +163,7 @@ namespace AutoClickByImage.service
                     {
                         return false;
                     }
-                   
+
                 }
                 catch (OpenCvException error)
                 {
@@ -209,9 +206,9 @@ namespace AutoClickByImage.service
                     List<PositionMatch> listPosition = serviceSearchImage.MutiSearchImages(bitmapOriginal, bitmapSearch, accuracy, debug);
                     int size = listPosition.Count;
 
-                    if (size > 0 )
+                    if (size > 0)
                     {
-                        for (int i=0; i< size; i++)
+                        for (int i = 0; i < size; i++)
                         {
                             PositionMatch position = listPosition[i];
 

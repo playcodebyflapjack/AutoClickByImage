@@ -1,5 +1,4 @@
 ﻿using AutoClickByImage.exception;
-using AutoClickByImage.model;
 using BotAutoFindItem.model;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -7,25 +6,24 @@ using Emgu.CV.Structure;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Reflection;
 
 namespace AutoClickByImage.service
 {
     class SearchImage
     {
         private readonly string FODER_DEBUG_IMAGE = "debugimage";
-    
-        public PositionMatch SingleSearchImage(Bitmap imgSource, Bitmap imgSeach, double accuracy , bool debug = false)
+        
+
+        public PositionMatch SingleSearchImage(Bitmap imgSource, Bitmap imgSeach, double accuracy, bool debug = false)
         {
-            Image<Bgr, byte> template = null , source = null;
+            Image<Bgr, byte> template = null, source = null;
             Image<Gray, float> result = null;
 
             try
             {
-                 template =  imgSeach.ToImage<Bgr, byte>();
-                 source   =  imgSource.ToImage<Bgr, byte>();
+                template = imgSeach.ToImage<Bgr, byte>();
+                source = imgSource.ToImage<Bgr, byte>();
 
                 try
                 {
@@ -33,7 +31,7 @@ namespace AutoClickByImage.service
                 }
                 catch (Exception error)
                 {
-                    throw new OpenCvException(error.Message,error);
+                    throw new OpenCvException(error.Message, error);
                 }
 
                 double[] minValues, maxValues;
@@ -75,11 +73,11 @@ namespace AutoClickByImage.service
                 {
                     result.Dispose();
                 }
- 
+
             }
         }
 
-      
+
         public List<PositionMatch> MutiSearchImages(Bitmap imageOriginal, Bitmap imageSearch, double accuracy, bool debug = false)
         {
             Image<Bgr, byte> imgOriginalByte = null, imgSearchByte = null;
@@ -88,12 +86,13 @@ namespace AutoClickByImage.service
             try
             {
                 imgOriginalByte = imageOriginal.ToImage<Bgr, byte>();
-                imgSearchByte   = imageSearch.ToImage<Bgr, byte>();
-              
+                imgSearchByte = imageSearch.ToImage<Bgr, byte>();
+
                 using (Image<Bgr, byte> imageCloneOriginal = imgOriginalByte.Copy())
                 {
                     while (true)
                     {
+                       
                         try
                         {
                             using (Image<Gray, float> result = imageCloneOriginal.MatchTemplate(imgSearchByte, TemplateMatchingType.CcoeffNormed))
@@ -105,6 +104,9 @@ namespace AutoClickByImage.service
 
                                 if (maxValues[0] > accuracy)
                                 {
+                                    Rectangle match = new Rectangle(maxLocations[0], imgSearchByte.Size);
+                                    imageCloneOriginal.Draw(match, new Bgr(Color.Red), -1);
+
                                     listOfPositionMatch.Add(new PositionMatch(maxLocations[0].X, maxLocations[0].Y));
                                 }
                                 else
@@ -123,7 +125,7 @@ namespace AutoClickByImage.service
 
                 if (debug)
                 {
-                    debugImage(imgSearchByte, listOfPositionMatch, imgOriginalByte.Size);
+                    debugImage(imgOriginalByte, listOfPositionMatch, imgSearchByte.Size);
                 }
 
                 return listOfPositionMatch;
@@ -135,7 +137,7 @@ namespace AutoClickByImage.service
             }
             finally
             {
-               
+
                 if (imgOriginalByte != null)
                 {
                     imgOriginalByte.Dispose();
