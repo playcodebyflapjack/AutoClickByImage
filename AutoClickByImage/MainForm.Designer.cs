@@ -254,6 +254,7 @@ namespace AutoClickByImage
             this.cbDebugSaveImage.TabIndex = 17;
             this.cbDebugSaveImage.Text = "debug image (save image)";
             this.cbDebugSaveImage.UseVisualStyleBackColor = true;
+            this.cbDebugSaveImage.CheckedChanged += new System.EventHandler(this.cbDebugSaveImage_CheckedChanged);
             // 
             // cbdebugDrawingWindows
             // 
@@ -265,6 +266,7 @@ namespace AutoClickByImage
             this.cbdebugDrawingWindows.TabIndex = 18;
             this.cbdebugDrawingWindows.Text = "debug image (drawing windows)";
             this.cbdebugDrawingWindows.UseVisualStyleBackColor = true;
+            this.cbdebugDrawingWindows.CheckedChanged += new System.EventHandler(this.cbdebugDrawingWindows_CheckedChanged);
             // 
             // MainForm
             // 

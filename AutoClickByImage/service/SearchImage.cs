@@ -13,9 +13,10 @@ namespace AutoClickByImage.service
     class SearchImage
     {
         private readonly string FODER_DEBUG_IMAGE = "debugimage";
-        
 
-        public PositionMatch SingleSearchImage(Bitmap imgSource, Bitmap imgSeach, double accuracy, bool debug = false)
+        public bool debugSaveImage { get; set; } = false;
+
+        public PositionMatch SingleSearchImage(Bitmap imgSource, Bitmap imgSeach, double accuracy)
         {
             Image<Bgr, byte> template = null, source = null;
             Image<Gray, float> result = null;
@@ -40,7 +41,7 @@ namespace AutoClickByImage.service
 
                 if (maxValues[0] > accuracy)
                 {
-                    if (debug)
+                    if (debugSaveImage)
                     {
                         debugImage(source, maxLocations[0], template.Size);
                     }
@@ -78,7 +79,7 @@ namespace AutoClickByImage.service
         }
 
 
-        public List<PositionMatch> MutiSearchImages(Bitmap imageOriginal, Bitmap imageSearch, double accuracy, bool debug = false)
+        public List<PositionMatch> MutiSearchImages(Bitmap imageOriginal, Bitmap imageSearch, double accuracy)
         {
             Image<Bgr, byte> imgOriginalByte = null, imgSearchByte = null;
             List<PositionMatch> listOfPositionMatch = new List<PositionMatch>();
@@ -123,7 +124,7 @@ namespace AutoClickByImage.service
                     }
                 }
 
-                if (debug)
+                if (debugSaveImage)
                 {
                     debugImage(imgOriginalByte, listOfPositionMatch, imgSearchByte.Size);
                 }

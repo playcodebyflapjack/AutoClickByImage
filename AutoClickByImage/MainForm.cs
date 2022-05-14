@@ -1,4 +1,5 @@
-﻿using AutoClickByImage.exception;
+﻿using AutoClickByImage.calldll;
+using AutoClickByImage.exception;
 using AutoClickByImage.model;
 using AutoClickByImage.service;
 using System;
@@ -152,23 +153,21 @@ namespace AutoClickByImage
             ItemProcess itemSelectProcess = getValueComboBoxProcess();
             IntPtr handle = itemSelectProcess.valueHandle;
 
+            CallUser32Dll.SetForegroundWindow(handle);
+
             if (Messages.MESSAGE_SINGLE_MODE_CLICK.Equals(item.modeClick))
             {
                 return serviceMangementClickWindows.SingleClickByImage(
                       handle,
                       image,
-                      threshold,
-                      this.cbDebugSaveImage.Checked,
-                      this.cbdebugDrawingWindows.Checked);
+                      threshold);
             }
             else
             {
                 return serviceMangementClickWindows.MutiClickByImage(
                        handle,
                       image,
-                      threshold,
-                      this.cbDebugSaveImage.Checked,
-                      this.cbdebugDrawingWindows.Checked
+                      threshold
                     );
             }
 
@@ -191,11 +190,11 @@ namespace AutoClickByImage
 
             if (Messages.MESSAGE_SINGLE_MODE_CLICK.Equals(item.modeClick))
             {
-                return await serviceADB.SingleClickByImage(target, image, threshold, this.cbDebugSaveImage.Checked);
+                return await serviceADB.SingleClickByImage(target, image, threshold);
             }
             else
             {
-                return await serviceADB.MutiClickByImage(target, image, threshold, this.cbDebugSaveImage.Checked);
+                return await serviceADB.MutiClickByImage(target, image, threshold);
             }
         }
 
@@ -331,6 +330,14 @@ namespace AutoClickByImage
             }
         }
 
+        private void cbDebugSaveImage_CheckedChanged(object sender, EventArgs e)
+        {
+            this.serviceSearchImage.debugSaveImage = this.cbDebugSaveImage.Checked;  
+        }
 
+        private void cbdebugDrawingWindows_CheckedChanged(object sender, EventArgs e)
+        {
+            this.serviceMangementClickWindows.debugImageDrawWindows = this.cbdebugDrawingWindows.Checked;
+        }
     }
 }

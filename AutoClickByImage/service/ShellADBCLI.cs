@@ -137,7 +137,7 @@ namespace AutoClickByImage.service
 
         }
 
-        public async Task<bool> SingleClickByImage(string device, string pathImageSearch, double accuracy, bool debug = false)
+        public async Task<bool> SingleClickByImage(string device, string pathImageSearch, double accuracy)
         {
             if (!String.IsNullOrEmpty(device))
             {
@@ -149,7 +149,7 @@ namespace AutoClickByImage.service
                     bitmapOriginal = new Bitmap(pathFileOriginal);
                     bitmapSearch = new Bitmap(pathImageSearch);
 
-                    PositionMatch position = serviceSearchImage.SingleSearchImage(bitmapOriginal, bitmapSearch, accuracy, debug);
+                    PositionMatch position = serviceSearchImage.SingleSearchImage(bitmapOriginal, bitmapSearch, accuracy);
 
                     if (position != null)
                     {
@@ -191,7 +191,7 @@ namespace AutoClickByImage.service
         }
 
 
-        public async Task<bool> MutiClickByImage(string device, string pathImageSearch, double accuracy, bool debug = false)
+        public async Task<bool> MutiClickByImage(string device, string pathImageSearch, double accuracy)
         {
             if (!String.IsNullOrEmpty(device))
             {
@@ -203,7 +203,7 @@ namespace AutoClickByImage.service
                     bitmapOriginal = new Bitmap(pathFileOriginal);
                     bitmapSearch = new Bitmap(pathImageSearch);
 
-                    List<PositionMatch> listPosition = serviceSearchImage.MutiSearchImages(bitmapOriginal, bitmapSearch, accuracy, debug);
+                    List<PositionMatch> listPosition = serviceSearchImage.MutiSearchImages(bitmapOriginal, bitmapSearch, accuracy);
                     int size = listPosition.Count;
 
                     if (size > 0)

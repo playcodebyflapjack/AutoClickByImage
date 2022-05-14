@@ -13,7 +13,8 @@ namespace AutoClickByImage.service
     {
         private readonly ScreenCapture serviceScreenCapture;
         private readonly SearchImage serviceScreenImage;
-
+        public  bool debugImageDrawWindows { get; set; } = false;
+        
 
         public ManagementClickWindows(ScreenCapture screenCapture, SearchImage searchImage)
         {
@@ -49,7 +50,7 @@ namespace AutoClickByImage.service
             return (uint)((y << 16) | (x & 0xFFFF));
         }
 
-        public bool SingleClickByImage(IntPtr handle, string pathImageSearch, double accuracy, bool debug = false, bool debugDrawWindows = false)
+        public bool SingleClickByImage(IntPtr handle, string pathImageSearch, double accuracy)
         {
             if (handle != null)
             {
@@ -60,7 +61,7 @@ namespace AutoClickByImage.service
 
                     bitmapSearch = new Bitmap(pathImageSearch);
 
-                    PositionMatch position = serviceScreenImage.SingleSearchImage(bitmapOriginal, bitmapSearch, accuracy, debug);
+                    PositionMatch position = serviceScreenImage.SingleSearchImage(bitmapOriginal, bitmapSearch, accuracy);
 
 
                     if (position != null)
@@ -71,7 +72,7 @@ namespace AutoClickByImage.service
                         int positionX = offsetX + position.x;
                         int positionY = offsetY + position.y;
 
-                        if (debugDrawWindows)
+                        if (debugImageDrawWindows)
                         {
                             new Thread(delegate ()
                             {
@@ -114,7 +115,7 @@ namespace AutoClickByImage.service
             return false;
         }
 
-        public bool MutiClickByImage(IntPtr handle, string pathImageSearch, double accuracy, bool debug = false, bool debugDrawWindows = false)
+        public bool MutiClickByImage(IntPtr handle, string pathImageSearch, double accuracy)
         {
             if (handle != null)
             {
@@ -124,7 +125,7 @@ namespace AutoClickByImage.service
                     bitmapOriginal = serviceScreenCapture.CaptureWindow(handle);
 
                     bitmapSearch = new Bitmap(pathImageSearch);
-                    List<PositionMatch> positions = serviceScreenImage.MutiSearchImages(bitmapOriginal, bitmapSearch, accuracy, debug);
+                    List<PositionMatch> positions = serviceScreenImage.MutiSearchImages(bitmapOriginal, bitmapSearch, accuracy);
                     int sizePositions = positions.Count;
 
                     if (sizePositions > 0)
@@ -133,7 +134,7 @@ namespace AutoClickByImage.service
                         int offsetX = bitmapSearch.Width / 2;
                         int offsetY = bitmapSearch.Height / 2;
 
-                        if (debugDrawWindows)
+                        if (debugImageDrawWindows)
                         {
                             new Thread(delegate ()
                             {
@@ -151,7 +152,6 @@ namespace AutoClickByImage.service
                             BackgroundMouseClick(handle, CallUser32Dll.VKeys.KEY_LBUTTON, positionX, positionY, 500);
                         }
 
-                        
                         return true;
                     }
                     else
